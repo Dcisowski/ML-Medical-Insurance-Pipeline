@@ -10,12 +10,10 @@ from model.config.core import config
 def validate_inputs(*, input_data: pd.DataFrame) -> Tuple[pd.DataFrame, Optional[dict]]:
     """Check model inputs for unprocessable values."""
 
-    # convert syntax error field names (beginning with numbers)
     validated_data = input_data[config.model_config.features].copy()
     errors = None
 
     try:
-        # replace numpy nans so that pydantic can validate
         MultiplePatientDataInputs(
             inputs=validated_data.replace({np.nan: None}).to_dict(orient="records")
         )
